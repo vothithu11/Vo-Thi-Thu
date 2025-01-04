@@ -1,6 +1,7 @@
 Problem 3: Messy React
 1. Remove prices from the useMemo dependency in sortedBalances
-Since prices is only used to calculate the USD value after the array has been sorted and filtered, it does not affect the computation of sortedBalances. Therefore, the useMemo dependency for sortedBalances should only include balances.
+Since prices is only used to calculate the USD value after the array has been sorted and filtered, it does not affect the computation of sortedBalances. 
+Therefore, the useMemo dependency for sortedBalances should only include balances.
 In addition, the variable lhsPriority in sortedBalances is being used before it is declared. 
 const sortedBalances = useMemo(() => {
     return balances.filter((balance: WalletBalance) => {
@@ -18,6 +19,9 @@ const sortedBalances = useMemo(() => {
   }, [balances]);
 
 2. Using the useMemo Hook to prevent unnecessary re-renders
-The purpose of the useMemo Hook is to optimize performance by avoiding unnecessary recalculations. However, because balances is a reference type, every time the component re-renders, its reference may change even if the data remains the same. This behavior makes using balances directly as a dependency for sortedBalances ineffective, as the useMemo will be invalidated on every render.
-To address this, wrapping the call to useWalletBalances in a useMemo to stabilize the reference to balances. This ensures that the useMemo for sortedBalances only re-calculates when the actual data in balances changes. 
+The purpose of the useMemo Hook is to optimize performance by avoiding unnecessary recalculations. 
+However, because balances is a reference type, every time the component re-renders, its reference may change even if the data remains the same. 
+This behavior makes using balances directly as a dependency for sortedBalances ineffective, as the useMemo will be invalidated on every render.
+To address this, wrapping the call to useWalletBalances in a useMemo to stabilize the reference to balances.
+This ensures that the useMemo for sortedBalances only re-calculates when the actual data in balances changes. 
 const balances = useMemo(() => useWalletBalances(), [dependency]);
